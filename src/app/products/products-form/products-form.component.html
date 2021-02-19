@@ -1,28 +1,29 @@
 <form novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
-    <input type="hidden" name="ProductId" [value]="service.formData.ProductId" />
+    <input type="hidden" name="productId" [value]="service.formData.productId" />
     <div class="form-group">
-        <label for="ProductName">Product Name</label>
-        <input class="form-control form-control-lg" placeholder="Product Name" name="ProductName"
-            id="ProductName" #ProductName="ngModel" [(ngModel)]="service.formData.ProductName"
-            required [class.invalid]="ProductName.invalid &#038;&#038; ProductName.touched">
+        <label for="productName">Product Name</label>
+        <input class="form-control form-control-lg" placeholder="Product Name" name="productName"
+            id="productName" #productName="ngModel" [(ngModel)]="service.formData.productName"
+            required [class.invalid]="productName.invalid && productName.touched">
     </div>
     <div class="form-group">
-        <label for="ProductPrice">Product Price</label>
-        <input class="form-control form-control-lg" placeholder="Product Price" name="ProductPrice"
-            id="ProductPrice" #ProductPrice="ngModel" [(ngModel)]="service.formData.ProductPrice"
-            required [class.invalid]="ProductPrice.invalid &#038;&#038; ProductPrice.touched">
+        <label for="productPrice">Product Price</label>
+        <input class="form-control form-control-lg" placeholder="Product Price" name="productPrice"
+            id="productPrice" #productPrice="ngModel" [(ngModel)]="service.formData.productPrice"
+            required [class.invalid]="productPrice.invalid && productPrice.touched">
     </div>
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="LastUpdated">Last Updated</label>
+        <!-- <div class="form-group col-md-6">
+            <label for="lastUpdated">Last Updated</label>
             <input class="form-control form-control-lg" placeholder="DD/MM/YY" name="Last Updated Date"
-                id="LastUpdated" #LastUpdated="ngModel" [(ngModel)]="service.formData.LastUpdated"
-                required [class.invalid]="LastUpdated.invalid &#038;&#038; LastUpdated.touched">
-        </div>
+                id="lastUpdated" #lastUpdated="ngModel" [(ngModel)]="service.formData.lastUpdated"
+                required [class.invalid]="lastUpdated.invalid && lastUpdated.touched">
+        </div> -->
 
         <div class="form-group col-md-6">
-            <label for="ProductImage">Select Product Image Later...</label>
+            <label for="ProductImage">Select Product Image</label>
             <!-- <input disabled type="file" class="form-control-file" id="ProductImage" name="ProductImage"> -->
+            <app-upload (onUploadFinished)="onUploadFinished($event)"></app-upload>
         </div>
         
     </div>
@@ -30,28 +31,3 @@
         <button class="btn btn-info btn-lg btn-block" type="submit" [disabled]="form.invalid">SUBMIT</button>
     </div>
 </form>
-
-<!-- <div class="container container-fluid">
-    <form>
-        <div class="form-group">
-            <label for="ProductName">Product Name</label>
-            <input type="text" class="form-control" id="ProductName" placeholder="Enter Product Name">
-        </div>
-
-        <div class="form-group">
-            <label for="ProductPrice">Product Price</label>
-            <input type="number" class="form-control" id="ProductPrice" placeholder="Product Price">
-        </div>
-
-        <div class="form-group">
-            <label for="ProductImage">Select Product Image</label>
-            <input type="file" class="form-control-file" id="ProductImage">
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="text" id="LastUpdated" placeholder="Readonly input here…" readonly>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div> -->

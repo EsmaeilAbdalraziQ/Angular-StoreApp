@@ -13,7 +13,7 @@ import { ProductsFormComponent } from './products/products-form/products-form.co
 const routes: Routes = [
   {path:'', redirectTo:'products', pathMatch:'full'},
   {path:'products', component: ProductsComponent},
-  {path:'create', component:ProductsFormComponent}
+  {path:'productsForm', component:ProductsFormComponent}
 
   // {path:'products/:id', component: DetailsProductComponent},
   // {path:'products/:id', component: EditProductComponent},

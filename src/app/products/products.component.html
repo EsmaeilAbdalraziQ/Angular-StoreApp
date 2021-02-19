@@ -1,89 +1,58 @@
-
-<table class="table">
-  <thead class="thead-light">
-      <tr>
-          <th>Product Name</th>
-          <th>Product Price</th>
-          <th>Last Updated</th>
-          <th></th>
-      </tr>
-  </thead>
-  <tr *ngFor="let prd of service.list">
-      <td (click)="populateForm(prd)">{{prd.ProductName}}</td>
-      <td (click)="populateForm(prd)">{{prd.ProductPrice}}</td>
-      <td (click)="populateForm(prd)">{{prd.LastUpdated}}</td>
-      <td>
-          <i class="far fa-trash-alt fa-lg text-danger" (click)="onDelete(prd.id)"></i>
-      </td>
-  </tr>
-</table>
-<!-- ------------------------------------------------------------------- -->
-<!-- Form -->
-<!-- <div class="jumbotron py-3">
-  <h1 class="text-left alert alert-success">Product Categories</h1>
+<div class="form-group">
+  <button (click)="exportAsXLSX()" class="btn btn-primary btn-block"> Export List To Excel Sheet </button>
 </div>
-<div class="row">
-  <div class="col-md-5">
-      <app-products-form></app-products-form>
-  </div>
-  <div class="col-md-7">
-      <div>table with list of records from the table</div> 
-  </div>
-</div> -->
-<!-- --------------------------------------------------------------------- -->
-<!-- ----List--------------------------------------------------------- -->
+<!-- ========================================================================================== -->
 
-<!-- <table class="table table-dark table-striped table-hover">
-    <thead>
-      <tr>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-    </tbody>
-  </table>
-<div class="btn-group">
-  <div class="btn-group">
-    <button (click)="DoGet()">Get Products</button>
-  </div>
+<!-- ========================================================================================== -->
+<div class="container mt-1 mb-1">
+    <div class="d-flex justify-content-center row">
+        <!-- ========================================================================================== -->
+        <div class="input-group">
+            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+              aria-describedby="search-addon" />
+            <button type="button" class="btn btn-primary">search</button>
+          </div>
+<!-- ========================================================================================== -->
+        <div class="col-md-10">
+            <hr>
+            <div *ngFor="let prd of service.list" [routerLink]="['/putProduct']"  class="row p-2 bg-white border rounded">
+                <div class="col-md-3 mt-1">
+                    <img [src] = "prd.photoPath" alt="productPhoto" class="img-fluid img-responsive rounded product-image">
+                </div>
+                <div class="col-md-6 mt-1">
+                    <h5 (click)="populateForm(prd)">{{prd.productName}}</h5>
+                    <div class="d-flex flex-row">
+                        <div class="ratings mr-2">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <span (click)="populateForm(prd)">$ {{prd.productPrice}} </span>
+                    </div>
+                    <div class="mt-1 mb-1 spec-1"><span>100% cotton</span><span class="dot"></span><span>Light weight</span><span class="dot"></span><span>Best finish<br></span></div>
+                    <div class="mt-1 mb-1 spec-1"><span>Unique design</span><span class="dot"></span><span>For men</span><span class="dot"></span><span>Casual<br></span></div>
+                    <p class="text-justify text-truncate para mb-0">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.<br><br></p>
+                </div>
+                <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                    <div class="d-flex flex-row align-items-center">
+                        <h4 class="mr-1">$13.99</h4><span class="strike-text">$20.99</span>
+                    </div>
+                    <h6 class="text-success" (click)="populateForm(prd)">{{prd.lastUpdated}}</h6>
+                    <div class="d-flex flex-column mt-4">
+                        <button class="btn btn-primary btn-sm" type="button">
+                            Details
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                            Add to wishlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr><hr>
+        </div>
+    </div>
+</div>
+<!-- ========================================================================================== -->
 
-  <div class="btn-group">
-    <button (click)="DoDelete()">Delete Product</button>
-  </div>
-
-  <div class="btn-group">
-    <button (click)="DoPost()">Add Product</button>
-  </div>
-
-  <div class="btn-group">
-    <button (click)="DoPut()">Edit Product</button>
-  </div>
-</div> -->
-
-<!-- --Details----------------------------------------------- -->
-
-<!-- <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action active">
-        Product Details 
-    </a>
-    <a href="#" class="list-group-item list-group-item-action list-group-item-success ">
-        Product Name :- ......
-    </a>
-    <a href="#" class="list-group-item list-group-item-action list-group-item-warning">
-        Product Price :- ......
-    </a>
-    <a href="#" class="list-group-item list-group-item-action list-group-item-danger">
-        Last Updated :- ../../....
-    </a>
-    <a href="#" class="list-group-item list-group-item-action list-group-item-dark disabled">
-        Photo Later
-    </a>
-  </div> -->
 

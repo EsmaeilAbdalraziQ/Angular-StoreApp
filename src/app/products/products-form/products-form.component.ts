@@ -15,6 +15,9 @@ export class ProductsFormComponent implements OnInit {
   constructor(public service: ProductsService, private toastr:ToastrService) { }
 
   ngOnInit(): void {
+    // if(this.service.formData ){
+
+    // }
   }
 
   resetForm(form:NgForm){
@@ -23,16 +26,22 @@ export class ProductsFormComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (this.service.formData.ProductId == 0) {
+    var productID = this.service.formData.productId;
+    this.service.formData.photoPath = "http://localhost:64360/" + this.service.response.dbPath;
+    
+    if (productID == 0) {
+      // this.service.formData.productId = 8;
+      console.log("Insert");
       this.insertRecord(form);
     }else{
+      console.log("Update");
       this.updateRecord(form);
     }
   }
   
   insertRecord(form: NgForm) {
-    this.service.PostProduct().subscribe(
-      res => {
+    this.service.PostProduct().subscribe(res =>
+      {
         this.resetForm(form);
         this.toastr.success("Submmited Successfuly.!", "Product Register");
         this.service.GetProductList();
@@ -41,6 +50,10 @@ export class ProductsFormComponent implements OnInit {
     )
   }
 
+  onUploadFinished(e : any){
+
+
+  }
   updateRecord(form: NgForm) {
     this.service.putProduct().subscribe(
       res => {

@@ -1,7 +1,20 @@
+import { Router } from '@angular/router';
 import { ProductsService } from './../Shared/products.service';
-import { Component, OnInit } from '@angular/core';
-import { Product } from 'app/Shared/product.model';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+
+import { map } from 'rxjs/operators';
+import { Product } from 'app/Shared/product.model';
+
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
+
 
 @Component({
   selector: 'app-products',
@@ -9,24 +22,36 @@ import { ToastrService } from 'ngx-toastr';
   styles: [
   ]
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnDestroy, OnInit  {
+  @ViewChild(DataTableDirective)
+  dtElement: DataTableDirective;
+  dtOptions: DataTables.Settings = {};
+  productsList: Product[] = [];
+  dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(public service:ProductsService, private toastr:ToastrService) { }
+  
+  constructor(public service:ProductsService, private toastr:ToastrService, private rout:Router) { }
 
-  ngOnInit(): void {
+   ngOnInit(){
+    this.dtOptions = { pagingType: 'full_numbers', pageLength: 2 };
     this.service.GetProductList();
+    this.dtTrigger.next();
+    // .subscribe(data=>{
+    //   this.list = [];
+    // })
   }
 
   populateForm(selectedRecord: Product){
-    this.service.formData = Object.assign({}, selectedRecord)
+    this.service.formData = Object.assign({}, selectedRecord);
+    this.rout.navigate(['productsForm']);
+
   }
 
   onDelete(id:number) {
     if (confirm('Are you sure to delete this record ?')) 
     {
       this.service.deleteProduct(id)
-        .subscribe(res =>
-        {
+        .subscribe(res => {
           this.service.GetProductList();
           this.toastr.error("Prodect Removed Successfuly", "Prodect Removed");
         },err =>
@@ -35,33 +60,42 @@ export class ProductsComponent implements OnInit {
         });
     }
   }
+//#region Export As Excel File 
+  public exportAsExcelFile(json: any[], excelFileName: string): void {
+    
+    const myworksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    const myworkbook: XLSX.WorkBook = { Sheets: { 'data': myworksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(myworkbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, excelFileName);
+  }
 
-//#region Methods
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(data, fileName + '_exported'+ EXCEL_EXTENSION);
+  }
 
-  // DoGet(){
-  //   // this.ApiService.DoGet().subscribe((res)=>{
-  //     this.ApiService.DoGet().toPromise().then((res)=>{
-  //     alert(`res: ${res}`);
-  //   });
-  // }
-
-  // DoDelete(){
-  //   this.ApiService.DoDelete().subscribe((res)=>{
-  //     alert(`res: ${res}`);
-  //   });
-  // }
-
-  // DoPost(){
-  //   this.ApiService.DoPost().subscribe((res)=>{
-  //     alert(`res: ${res}`);
-  //   });
-  // }
-
-  // DoPut(){
-  //   this.ApiService.DoPut().subscribe((res)=>{
-  //     alert(`res: ${res}`);
-  //   });
-  // }
+  exportAsXLSX():void {
+    if(confirm('Are sure want to Export')){
+      this.exportAsExcelFile(this.service.list, 'Product_data');
+    }
+    false;
+  }
+  
 //#endregion
 
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+    });
+   }
 }

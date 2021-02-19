@@ -1,6 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background: #00b09b;
+  background: -webkit-linear-gradient(to right, #00dac0, #aac57c);
+  background: linear-gradient(to right, #07c5af, #a4cc5e);
+  min-height: 100vh;
+}
+
 .form-group label {
-    color: grey;
+    color: lightblue;
   }
   
   .form-group input {
